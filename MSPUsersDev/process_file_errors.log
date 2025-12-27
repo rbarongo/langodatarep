@@ -1,0 +1,7 @@
+ERROR:root:Error processing A1241078290220.xls: Number of passed names did not match number of header fields in the file (sheet: ITRS2_URT_RECEIPTS)
+ERROR:root:Error processing A1241078310120.xls: Number of passed names did not match number of header fields in the file (sheet: ITRS2_URT_RECEIPTS)
+ERROR:root:Error processing A1251078290220.xls: Number of passed names did not match number of header fields in the file (sheet: ITRS2_URT_RECEIPTS)
+ERROR:root:Error processing A1251078310120.xls: Number of passed names did not match number of header fields in the file (sheet: ITRS2_URT_RECEIPTS)
+ERROR:root:Error processing A1281078290220.xls: Number of passed names did not match number of header fields in the file (sheet: ITRS2_URT_RECEIPTS)
+ERROR:root:Error processing A1291078290220.xls: Number of passed names did not match number of header fields in the file (sheet: ITRS2_URT_RECEIPTS)
+ERROR:root:Error processing A1291078310120.xls: Number of passed names did not match number of header fields in the file (sheet: ITRS2_URT_RECEIPTS)
