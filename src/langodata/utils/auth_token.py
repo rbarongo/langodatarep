@@ -14,9 +14,9 @@ The authenticate_user function checks if the user has a valid token. If not, it 
 import os
 import jwt  # Install this package with pip install pyjwt
 from datetime import datetime, timedelta
-from utils.database import DatabaseConnection
-from utils.logger import Logger
-from utils.license_manager import validate_license
+from langodata.utils.database import DatabaseConnection
+from langodata.utils.logger import Logger
+from langodata.utils.license_manager import validate_license
 import requests
 import sys
 import getpass

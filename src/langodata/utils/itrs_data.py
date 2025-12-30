@@ -1,12 +1,12 @@
 import os
 import pandas as pd
-from utils.database import DatabaseConnection
-from utils.logger import Logger
+from langodata.utils.database import DatabaseConnection
+from langodata.utils.logger import Logger
 from typing import Dict
 from datetime import datetime
 
 import oracledb
-from utils.decryption import decrypt
+from langodata.utils.decryption import decrypt
 
 def get_schema(data_source: str, data_type: str) -> str:
     """Determine the schema based on the data source and type."""

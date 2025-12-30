@@ -1,6 +1,6 @@
 import oracledb
 import os
-from utils.decryption import decrypt
+from langodata.utils.decryption import decrypt
 
 class DatabaseConnection:
     def __init__(self, data_source):

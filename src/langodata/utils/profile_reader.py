@@ -1,7 +1,7 @@
 import os
 import pandas as pd
-from utils.database import DatabaseConnection
-from utils.logger import Logger
+from langodata.utils.database import DatabaseConnection
+from langodata.utils.logger import Logger
 #from utils.license_manager import validate_license, check_license_status
 #from utils.auth_token import authenticate_user
 

@@ -1,7 +1,7 @@
 import os
 import pandas as pd
-from utils.database import DatabaseConnection
-from utils.logger import Logger
+from langodata.utils.database import DatabaseConnection
+from langodata.utils.logger import Logger
 
 
 def read_msp_data(data_group: str, data_source: str, data_type: str, bank_code: str, start_period: str, end_period: str) -> dict:

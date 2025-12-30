@@ -1,12 +1,12 @@
 import pandas as pd
 from datetime import datetime
-from utils.logger import Logger
-from utils.license_manager import validate_license, check_license_status
-from utils.auth_token import authenticate_user
-from utils.msp_data import read_msp_data
-from utils.itrs_data import read_itrs_data
-from utils.profile_reader import read_fsp_profile
-from utils.submission_manager import read_submissions
+from langodata.utils.logger import Logger
+from langodata.utils.license_manager import validate_license, check_license_status
+from langodata.utils.auth_token import authenticate_user
+from langodata.utils.msp_data import read_msp_data
+from langodata.utils.itrs_data import read_itrs_data
+from langodata.utils.profile_reader import read_fsp_profile
+from langodata.utils.submission_manager import read_submissions
 
 def validate_inputs(data_group, data_source, start_period, end_period):
     """
