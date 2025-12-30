@@ -11,4 +11,19 @@ cd C:\_rwey\python\LangoData\langodatarep
 langodataenv\Scripts\activate 
 
 #Step 2: Run your app
-python -m langodata.main
+(langodataenv) PS C:\_rwey\python\LangoData\langodatarep> python -m langodata.main
+
+#Install Pytest
+(langodataenv) PS C:\_rwey\python\LangoData\langodatarep> pip install pytest
+python -m pytest
+
+
+
+
+PS C:\_rwey\python\LangoData\langodatarep> & C:/_rwey/python/LangoData/langodatarep/langodataenv/Scripts/Activate.ps1     
+(langodataenv) PS C:\_rwey\python\LangoData\langodatarep> & C:/_rwey/python/LangoData/langodatarep/langodataenv/Scripts/python.exe c:/_rwey/python/LangoData/langodatarep/scripts/msp_user.py
+Manual test output:
+{'id': 1, 'value': 'alpha'}
+{'id': 2, 'value': 'beta'}
+{'id': 3, 'value': 'gamma'}
+(langodataenv) PS C:\_rwey\python\LangoData\langodatarep> 
