@@ -1,0 +1,9 @@
+README.md
+pyproject.toml
+setup.py
+langodata.egg-info/PKG-INFO
+langodata.egg-info/SOURCES.txt
+langodata.egg-info/dependency_links.txt
+langodata.egg-info/top_level.txt
+tests/__init__.py
+tests/test_basic.py

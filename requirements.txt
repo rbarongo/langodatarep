@@ -6,3 +6,9 @@ dotenv-0.9.9
 PyJWT-2.10.1
 oracledb-3.4.1
 requests-2.32.5
+python-dotenv
+
+#packages for building and distributing
+wheel-0.45.1
+setuptools-80.9.0
+packaging-25.0

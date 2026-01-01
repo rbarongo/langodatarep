@@ -15,9 +15,9 @@ def validate_inputs(data_group, data_source, start_period, end_period):
     errors = []
     valid_data_groups = [
         "MSP", "ITRS", "NPS", "BANK", "FUNDS", "MORGAGE", "LEASING", 
-        "TMS", "FXCFMIS", "CBR", "DERP-DATA", "TS-BOP"
+        "TMS", "FXCFMIS", "CBR", "DERP-DATA"
     ]
-    valid_data_sources = ["BSIS", "EDI", "DERPTS"]
+    valid_data_sources = ["BSIS", "EDI"]
 
     if data_group not in valid_data_groups:
         errors.append(f"Invalid data group: {data_group}")
@@ -114,11 +114,11 @@ def read_profile(data_group, data_source, fsp_code):
     # Validate inputs
     if data_group not in [
         "MSP", "ITRS", "NPS", "BANK", "FUNDS", "MORGAGE", "LEASING", 
-        "TMS", "FXCFMIS", "CBR", "DERP-DATA", "TS-BOP"
+        "TMS", "FXCFMIS", "CBR", "DERP-DATA"
     ]:
         feedback["debug"] = f"Invalid data group: {data_group}"
         return feedback
-    if data_source not in ["BSIS","EDI","DERPTS"]:
+    if data_source not in ["BSIS","EDI"]:
         feedback["debug"] = f"Invalid data source: {data_source}"
         return feedback
 

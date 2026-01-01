@@ -1,0 +1,122 @@
+MSP Data Tool Developer Guide
+=============================
+
+project-root/
+│
+├── src/                     #source code
+│   └── langodata/
+│       ├── __init__.py
+│       └── utils/
+│           ├── __init__.py
+│           ├── data_reader.py
+│           ├── msp_data.py
+│           ├── database.py
+│           ├── logger.py
+│           └── auth_token.py
+│
+├── scripts/                 # USER PROGRAMS (run from here)
+├── tests/                   # py tests
+├── dist/                    # distributions
+├── pyproject.toml
+└── README.md
+
+
+
+MSPUserDataTool/          ← USER ROOT PATH
+│
+├── scripts/              ← USER PROGRAMS (ONLY place users write code)
+│   ├── msp_pull_data.py
+│   ├── msp_consolidated.py
+│   └── analysis.ipynb
+│
+├── userConfig/           ← USER-SPECIFIC CONFIGURATION
+│   ├── config.yaml
+│   └── logging.yaml
+│
+├── certificate/          ← CERTIFICATES / KEYS
+│   ├── bot_root_ca.pem
+│   └── api_client.pfx
+│
+├── data/                 ← OUTPUT DATA (optional but recommended)
+│   ├── raw/
+│   └── processed/
+│
+├── .env                  ← ENVIRONMENT VARIABLES
+│
+├── dist/                 ← DEPLOYED WHEELS (optional storage)
+│   └── langodata-1.0.0-py3-none-any.whl
+│
+└── venv/ or langodataenv/ ← PYTHON VIRTUAL ENVIRONMENT (optional)
+
+Post-development:
+Install packaging tools: pip install --upgrade setuptools packaging
+
+
+Compilation: 
+python -m compileall src or "python -m compileall path/to/project/src" from outside folder
+Build package by running setup: python setup.py sdist bdist_wheel
+Copy the following folders to MSPUserDataTool
+   .ipynb_checkpoints
+   __pycache__
+   certificate
+   .env
+   userConfig
+   userProgram
+   utils-1.0.0
+
+All user scripts must import utilities using:
+from langodata.utils import read_data, read_profile
+
+Tests:
+Test specific util module: eg auth_token.py
+Test script: cd MSPUserTests  then python -m unittest test_utils.py
+
+Running in user accessed folder:
+Installation: pip install utils-1.0.0-py3-none-any.whl
+!pip install utils-1.0.1-py3-none-any.whl --force-reinstall
+
+User Imports
+jwt python-dotenv pandas
+
+Analytics server:
+sudo adduser dataanalysis
+passwd:  analysis2024
+
+sudo pip install jupyterlab
+jupyter lab --version
+
+
+
+
+
+
+Docker config in online server:
+ 1187  docker --version
+ 1188  sudo su
+ 1189  sudp apt update
+ 1190  sudo apt update
+ 1191  sudo apt install -y docker.io docker-compise
+ 1192  sudo apt install -y docker.io docker-compose
+ 1193  sudo apt-get update --fix-missing
+ 1194  sudo apt-get install -f
+ 1195  sudo dpkg --configure -a
+ 1196  sudo apt-get clean
+ 1197  sudo apt-get autoremove
+ 1198  sudo apt-get remove -y docker docker-engine docker.io containerd runc
+ 1199  sudo apt-get update
+ 1200  sudo apt-get install -y ca-certificates curl gnupg
+ 1201  sudo apt-get update
+ 1202  sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+ 1203  sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+ 1204  sudo chmod +x /usr/local/bin/docker-compose
+ 1205  docker --version
+ 1206  docker-compose --version
+ 1207  sudo systemctl start docker
+ 1208  sudo systemctl enable docker
+ 1209  sudo docker run hello-world
+ 1210  vi docker-compose.yml
+ 1211  sudo docker-compose up
+ 1212  history
+ 
+ 
+
