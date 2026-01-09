@@ -120,19 +120,132 @@ def perform_bsis_login(username, password):
                 #logger.info("Password match successful")
                 return True
             else:
-                logger.warning("Incorrect password")
+                logger.warning("Login not successful")
                 return False
 
     except Exception as e:
         logger.error(f"Database error during BSIS login: {e}")
-        return False         
+        return False
 
-  
-       
-def authenticate_user():
+
+def perform_non_bsis_login(data_group, username, password):
+    """
+    Perform non-BSIS user login with support for:
+    1. Static username and password validation
+    2. Domain Active Directory credentials validation
+    
+    Supported data groups:
+    - MACROECONOMICS
+    - IT-MONITORING
+    - IT-SECURITY
+    - CURRENCY
+    - FINANCIAL-MARKETS
+    - PHYSICAL-SECURITY
+    - TOURISM
+    
+    Parameters:
+    -----------
+    data_group : str
+        The data group name (used to construct env variable names)
+    username : str
+        User's username
+    password : str
+        User's password
+    
+    Returns:
+    --------
+    bool
+        True if authentication succeeds, False otherwise
+    """
+    logger = Logger()
+    
+    # Normalize data group name for environment variable construction
+    # Convert spaces and hyphens to underscores for env var naming
+    data_group_upper = data_group.upper().replace("-", "_").replace(" ", "_")
+    
+    # Construct environment variable names based on data_group
+    username_env_var = f"{data_group_upper}_USERNAME"
+    password_env_var = f"{data_group_upper}_PASSWORD"
+    domain_login_env_var = f"{data_group_upper}_USE_DOMAIN_LOGIN"
+    
+    # Get configuration from environment variables
+    static_username = os.getenv(username_env_var, "").strip()
+    static_password = os.getenv(password_env_var, "").strip()
+    use_domain_login = os.getenv(domain_login_env_var, "false").lower() == "true"
+    
+    try:
+        # Method 1: Static credentials validation
+        if not use_domain_login:
+            if static_username and static_password:
+                if username.upper() == static_username.upper() and password == static_password:
+                    logger.info(f"{data_group} user authenticated with static credentials")
+                    return True
+                else:
+                    logger.warning(f"{data_group} static credential validation failed")
+                    return False
+            else:
+                logger.warning(f"{data_group} static credentials not configured ({username_env_var}/{password_env_var})")
+                return False
+        
+        # Method 2: Domain Active Directory validation
+        else:
+            if perform_domain_login(username, password):
+                logger.info(f"{data_group} user authenticated with AD credentials")
+                return True
+            else:
+                logger.warning(f"{data_group} AD credential validation failed")
+                return False
+                
+    except Exception as e:
+        logger.error(f"Error during {data_group} login: {e}")
+        return False
+
+
+def perform_macroeconomics_login(username, password):
+    """
+    Perform MACROECONOMICS user login with support for:
+    1. Static username and password validation
+    2. Domain Active Directory credentials validation
+    
+    DEPRECATED: Use perform_non_bsis_login() for all non-BSIS groups.
+    This function is kept for backward compatibility.
+    """
+    return perform_non_bsis_login("MACROECONOMICS", username, password)         
+
+        
+def authenticate_user(data_group="BSIS"):
+    """
+    Authenticate a user based on their data group.
+    
+    Parameters:
+    -----------
+    data_group : str, optional
+        The data group for the user. 
+        
+        Supported values:
+        - "BSIS" (default) - Uses BSIS database authentication
+        - "MACROECONOMICS" - Uses static/AD authentication
+        - "IT-MONITORING" - Uses static/AD authentication
+        - "IT-SECURITY" - Uses static/AD authentication
+        - "CURRENCY" - Uses static/AD authentication
+        - "FINANCIAL-MARKETS" - Uses static/AD authentication
+        - "PHYSICAL-SECURITY" - Uses static/AD authentication
+        - "TOURISM" - Uses static/AD authentication
+    
+    Returns:
+    --------
+    str or None
+        JWT token if authentication is successful, None otherwise
+    """
     logger = Logger()    
     domainLogin = False
     token = ""
+    
+    # Define non-BSIS data groups that use generic login handler
+    non_bsis_groups = [
+        "MACROECONOMICS", "IT-MONITORING", "IT-SECURITY", "CURRENCY",
+        "FINANCIAL-MARKETS", "PHYSICAL-SECURITY", "TOURISM"
+    ]
     
     try:
         token = os.getenv("USER_TOKEN")
@@ -155,11 +268,18 @@ def authenticate_user():
     
         username = username.upper()
 
-        # Perform login and verify user status in BSIS database
+        # Perform login based on data group
         try:
-            if not (perform_bsis_login(username, password) == 1):
-                logger.error(f"Login failed.")
-                return None
+            if data_group.upper() in [g.upper() for g in non_bsis_groups]:
+                # Use generic non-BSIS login for supported groups
+                if not perform_non_bsis_login(data_group, username, password):
+                    logger.error(f"{data_group} login failed for user: {username}")
+                    return None
+            else:
+                # Default to BSIS login
+                if not perform_bsis_login(username, password):
+                    logger.error(f"BSIS login failed for user: {username}")
+                    return None
         except Exception as e:
             logger.error(f"Connectivity or other error: {e}")
                 #return None
@@ -170,7 +290,7 @@ def authenticate_user():
         token = generate_token(username)
         if verify_token(token):
             os.environ["USER_TOKEN"] = token
-            logger.info("Login successful")
+            logger.info(f"Login successful for {data_group} user: {username}")
             return token
 
 def binary_convert(mask: str) -> str:

@@ -1,7 +1,8 @@
 # utils/__init__.py
 from .data_reader import read_data, read_profile
 from .msp_data import read_msp_data
-from .ts_bop_data import read_ts_bop_data
+from .macroeconomics_data import read_macroeconomics_data
+from .itrs_data import read_itrs_data
 from .database import DatabaseConnection
 from .logger import Logger
 from .decryption import decrypt, encrypt
@@ -15,7 +16,8 @@ __all__ = [
     "read_data",
     "read_profile",
     "read_msp_data",
-    "read_ts_bop_data"
+    "read_macroeconomics_data",
+    "read_itrs_data",
     "DatabaseConnection",
     "Logger",
     "decrypt",

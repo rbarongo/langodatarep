@@ -4,6 +4,7 @@ from langodata.utils.logger import Logger
 from langodata.utils.license_manager import validate_license, check_license_status
 from langodata.utils.auth_token import authenticate_user
 from langodata.utils.msp_data import read_msp_data
+from langodata.utils.macroeconomics_data import read_macroeconomics_data
 from langodata.utils.itrs_data import read_itrs_data
 from langodata.utils.profile_reader import read_fsp_profile
 from langodata.utils.submission_manager import read_submissions
@@ -14,10 +15,12 @@ def validate_inputs(data_group, data_source, start_period, end_period):
     """
     errors = []
     valid_data_groups = [
-        "MSP", "ITRS", "NPS", "BANK", "FUNDS", "MORGAGE", "LEASING", 
-        "TMS", "FXCFMIS", "CBR", "DERP-DATA", "TS-BOP"
+        "MSP", "MACROECONOMICS", "ITRS", "NPS", "BANK", "FUNDS", "MORGAGE", "LEASING", 
+        "TMS", "FXCFMIS", "CBR", "DERP-DATA", "TS-BOP",
+        "IT-MONITORING", "IT-SECURITY", "CURRENCY", "FINANCIAL-MARKETS", 
+        "PHYSICAL-SECURITY", "TOURISM"
     ]
-    valid_data_sources = ["BSIS", "EDI", "DERPTS"]
+    valid_data_sources = ["BSIS", "EDI", "DWH"]
 
     if data_group not in valid_data_groups:
         errors.append(f"Invalid data group: {data_group}")
@@ -34,9 +37,9 @@ def validate_inputs(data_group, data_source, start_period, end_period):
 
     return errors
 
-def validate_environment():
+def validate_environment(data_group="BSIS"):
     """
-    Validates license and authentication.
+    Validates license and authentication based on data group.
     """
     try:
         validate_license()
@@ -46,8 +49,8 @@ def validate_environment():
         return f"License validation failed: {str(e)}"
 
     try:
-        if not authenticate_user():
-            return "User authentication failed."
+        if not authenticate_user(data_group):
+            return f"User authentication failed for {data_group}."
     except Exception as e:
         return f"Authentication error: {str(e)}"
 
@@ -66,11 +69,12 @@ def read_data(data_group, data_source, data_type, bank_code, start_period, end_p
     """
     Reads data based on specified parameters and handles workflow.
     """
+    data_frequency = bank_code
     logger = Logger()
     feedback = {"info": "", "debug": "", "df": pd.DataFrame()}
 
-    # Validate environment
-    env_error = validate_environment()
+    # Validate environment with specific data_group
+    env_error = validate_environment(data_group)
     if env_error:
         feedback["debug"] = env_error
         return feedback
@@ -84,6 +88,9 @@ def read_data(data_group, data_source, data_type, bank_code, start_period, end_p
     # Select appropriate handler
     if data_group == "MSP":
         feedback = execute_handler(read_msp_data, data_group, data_source, data_type, bank_code, start_period, end_period)
+    if data_group == "MACROECONOMICS":
+        data_frequency = bank_code
+        feedback = execute_handler(read_macroeconomics_data, data_group, data_source, data_type, data_frequency, start_period, end_period)
     if data_group == "ITRS":
         feedback = execute_handler(read_itrs_data, data_group, data_source, data_type, bank_code, start_period, end_period)
     elif data_group == "SUBMISSIONS":
